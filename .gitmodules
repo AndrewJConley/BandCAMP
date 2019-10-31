@@ -1,0 +1,3 @@
+[submodule "partmc"]
+	path = partmc
+	url = https://github.com/compdyn/partmc.git
