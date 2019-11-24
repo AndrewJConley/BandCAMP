@@ -1,7 +1,8 @@
 !> \file
 !> Prototype for a CAMP<->CPF interface
-module scheme_CAMP
+module scheme_BandCAMP
 
+  use camp_photolysis
   use pmc_camp_core
   use pmc_camp_state
   use pmc_constants
@@ -35,6 +36,8 @@ module scheme_CAMP
   type(camp_state_ptr), allocatable :: states(:)
   !> Species map between CAMP and CPF
   type(state_map_t), allocatable :: species_map(:)
+  !> Photolysis interfaces
+  type(camp_photolysis_t), allocatable :: photolysis_interface(:)
 
 contains
 
@@ -55,24 +58,31 @@ contains
 
     ! How do we get the number of threads that will be used during calls to
     ! run( )
-    allocate( cores( CPF_data%n_threads ) )
-    allocate( states( CPF_data$n_threads ) )
+    allocate( cores(                CPF_data%n_threads ) )
+    allocate( states(               CPF_data%n_threads ) )
+    allocate( photolysis_interface( CPF_data%n_threads ) )
 
     ! load and process the CAMP input data on the first core
     cores(1)%core => camp_core_t( CPF_data%path_to_CAMP_config_file )
     call cores(1)%core%initialize( )
 
-    ! pack the core data
-    pack_size = cores(1)%core%pack_size( )
+    ! set up the photolysis interface on the first core
+    call photolysis_interface(1)%initialize( CPF_data, cores(1)%core )
+
+    ! pack the core data and interface
+    pack_size = cores(1)%core%pack_size( ) + &
+                photolysis_interface(1)%pack_size( )
     allocate( buffer( pack_size ) )
     pos = 0
     call cores(1)%core%bin_pack( buffer, pos )
+    call photolysis_interface%bin_pack( buffer, pos )
 
     ! initialize remaining cores from the packed data
     do i_thread = 2, CPF_data%n_threads
       cores( i_thread )%core => camp_core_t( )
       pos = 0
       call cores( i_thread )%core%bin_unpack( buffer, pos )
+      call photolysis_interface( i_thread )%bin_unpack( buffer, pos )
     end do
 
     ! initialize solvers and get states for each thread
@@ -125,6 +135,10 @@ contains
           CPF_data%get_species_conc( species_map( i_spec )%CPF_idx )
       end do
 
+      ! Update the photolysis rates
+      call photolysis_interface( i_thread )%update_rates( CPF_data, &
+                                                      cores( i_thread )%core )
+
       ! Solve the chemistry on this cell
       call cores( i_thread )%core%solve( camp_state, solver_stats )
 
@@ -164,4 +178,4 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module scheme_CAMP
+end module scheme_BandCAMP
