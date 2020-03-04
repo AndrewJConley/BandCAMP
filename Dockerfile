@@ -27,3 +27,6 @@ RUN git clone https://github.com/gold2718/ccpp-framework \
     && cmake .. \
     && make
 
+# Identify the CCPP directory
+ENV CCPP_ROOT /ccpp-framework
+
