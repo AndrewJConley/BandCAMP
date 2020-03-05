@@ -5,7 +5,8 @@
   standard_name = foo
   units = s
   dimensions = ()
-  type = kind_phys
+  type = real
+  kind = kind_phys
   intent = in
 [bar]
   standard_name = bar
@@ -37,7 +38,8 @@
   standard_name = foo
   units = s
   dimensions = ()
-  type = kind_phys
+  type = real
+  kind = kind_phys
   intent = in
 [bar]
   standard_name = bar

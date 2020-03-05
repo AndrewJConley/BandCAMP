@@ -10,9 +10,10 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Initialization
+  !> \section arg_table_simple_scheme_init Argument Table
+  !! \htmlinclude chemistry_driver_init.html
   !!
-  subroutine simple_scheme_init(foo, bar, errmsg, errflag)
+  subroutine simple_scheme_init(foo, bar, errmsg, errflg)
 
     real(kind_phys), intent(in)     :: foo
     integer, intent(in)             :: bar
@@ -28,9 +29,10 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Run
+  !> \section arg_table_simple_scheme_run Argument Table
+  !! \htmlinclude chemistry_driver_run.html
   !!
-  subroutine simple_scheme_run(foo, bar, errmsg, errflag)
+  subroutine simple_scheme_run(foo, bar, errmsg, errflg)
 
     real(kind_phys), intent(in)     :: foo
     integer, intent(inout)          :: bar
@@ -47,12 +49,15 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Finalize
+  !> \section arg_table_simple_scheme_finalize Argument Table
+  !! \htmlinclude chemistry_driver_finalize.html
   !!
   subroutine simple_scheme_finalize(errmsg, errflg)
 
     character(len=512), intent(out) :: errmsg
     integer, intent(out)            :: errflg
+
+    write(*,*) "That's all folks!"
 
     errmsg = ''
     errflg = 0

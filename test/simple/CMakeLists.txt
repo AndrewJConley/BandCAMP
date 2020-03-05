@@ -5,13 +5,16 @@ ENABLE_LANGUAGE(Fortran)
 SET(CMAKE_MACOSX_RPATH 1)
 
 # CCPP directories
+FIND_PATH(CCPP_ROOT scripts/ccpp_capgen.py
+          DOC "CCPP-framework root directory"
+          PATH $ENV{CCPP_ROOT})
 SET(CCPP_CAP_FILES ${CMAKE_BINARY_DIR}/ccpp CACHE
     STRING "Location of CCPP-generated cap files")
 SET(CCPP_FRAMEWORK ${CCPP_ROOT}/scripts)
 
 SET(HOST "simple")
 ADD_EXECUTABLE(${HOST} simple_host.F90)
-TARGET_SOURCES(${HOST} simple_scheme.F90)
+TARGET_SOURCES(${HOST} PUBLIC simple_scheme.F90 simple_mod.F90)
 
 if (${CMAKE_Fortran_COMPILER_ID} MATCHES "GNU")
   ADD_COMPILE_OPTIONS(-fcheck=all)
@@ -41,7 +44,7 @@ endif (${CMAKE_Fortran_COMPILER_ID} MATCHES "GNU")
 LIST(APPEND CMAKE_MODULE_PATH ${CCPP_FRAMEWORK}/cmake)
 
 SET(SCHEME_METADATA simple_scheme.meta)
-SET(HOST_METADATA simple_host.meta)
+SET(HOST_METADATA simple_host.meta,simple_mod.meta)
 SET(SUITE_XML simple_suite.xml)
 
 # Run ccpp_capgen

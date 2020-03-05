@@ -1,27 +1,25 @@
 !> \file
 !> Mock ccpp host model for tests
-program simple_host_main
+module simple_host_main
 
   use ccpp_kinds,            only : kind_phys
   use simple_mod,            only : foo, bar, dt, time_start, time_end
-  use simple_ccpp_cap,       only : simple_ccpp_simple_group_initialize
-  use simple_ccpp_cap,       only : simple_ccpp_simple_group_timestep_initial
-  use simple_ccpp_cap,       only : simple_ccpp_simple_group_run
-  use simple_ccpp_cap,       only : simple_ccpp_simple_group_timestep_final
-  use simple_ccpp_cap,       only : simple_ccpp_simple_group_finalize
-  use simple_ccpp_cap,       only : ccpp_simple_group_suite_list
-  use simple_ccpp_cap,       only : ccpp_simple_group_suite_part_list
+  use simple_ccpp_cap,       only : simple_ccpp_physics_initialize
+  use simple_ccpp_cap,       only : simple_ccpp_physics_timestep_initial
+  use simple_ccpp_cap,       only : simple_ccpp_physics_run
+  use simple_ccpp_cap,       only : simple_ccpp_physics_timestep_final
+  use simple_ccpp_cap,       only : simple_ccpp_physics_finalize
+  use simple_ccpp_cap,       only : ccpp_physics_suite_list
+  use simple_ccpp_cap,       only : ccpp_physics_suite_part_list
 
   implicit none
-  private
-
-  public simple_host_sub
 
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Run the simple host model
+  !> \section arg_table_simple_host_sub  Argument Table
+  !! \htmlinclude arg_table_simple_host_sub.html
   !!
   subroutine simple_host_sub()
 
@@ -36,7 +34,7 @@ contains
     bar        = 10
 
     ! Initialize the simple suite
-    call simple_ccpp_simple_group_initialize("simple_suite", errmsg, errflg)
+    call simple_ccpp_physics_initialize("simple_suite", errmsg, errflg)
     if (errflg.ne.0) then
       write(6,*) trim(errmsg)
       stop
@@ -46,7 +44,7 @@ contains
     time_loop : do while (sim_time.le.time_end)
 
       ! Announce a new timestep
-      call simple_ccpp_simple_group_timestep_initial("simple_suite", errmsg, &
+      call simple_ccpp_physics_timestep_initial("simple_suite", errmsg, &
                                                      errflg)
       if (errflg.ne.0) then
         write(6,*) trim(errmsg)
@@ -54,14 +52,15 @@ contains
       end if
 
       ! Run the simple suite
-      call simple_ccpp_simple_group_run("simple_suite", errmsg, errflg)
+      call simple_ccpp_physics_run("simple_suite", "simple_group", errmsg, &
+                                   errflg)
       if (errflg.ne.0) then
         write(6,*) trim(errmsg)
         stop
       end if
 
       ! Announce the end of the timestep
-      call simple_ccpp_simple_group_timestep_final("simple_suite", errmsg, &
+      call simple_ccpp_physics_timestep_final("simple_suite", errmsg, &
                                                    errflg)
       if (errflg.ne.0) then
         write(6,*) trim(errmsg)
@@ -74,19 +73,18 @@ contains
     end do time_loop
 
     ! Finalize the simple suite
-    call simple_suite_ccpp_simple_group_finalize("simple_suite", errmsg, &
-                                                 errflg)
+    call simple_ccpp_physics_finalize("simple_suite", errmsg, errflg)
 
-  end subroutine simple_host_main
+  end subroutine simple_host_sub
+
+end module simple_host_main
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-!> Mock host model driver
-end module simple_host_main
-
+!> Simple model driver
+program simple_host
   use simple_host_main
   call simple_host_sub()
-
-program simple_host
-
 end program simple_host
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

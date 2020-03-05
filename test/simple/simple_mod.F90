@@ -3,11 +3,13 @@
 module simple_mod
 
   use ccpp_kinds,            only : kind_phys
-  use const_props_mod,       only : const_props_type
 
   implicit none
   public
 
+  !> \section arg_table_simple_mod Argument Table
+  !! \htmlinclude arg_table_simple_host.html
+  !!
   real(kind_phys) :: foo
   real(kind_phys) :: dt
   real(kind_phys) :: time_start

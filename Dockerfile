@@ -30,3 +30,13 @@ RUN git clone https://github.com/gold2718/ccpp-framework \
 # Identify the CCPP directory
 ENV CCPP_ROOT /ccpp-framework
 
+# Copy the BandCAMP folder
+COPY . /BandCAMP/
+
+# Build the simple scheme test
+RUN cd BandCAMP/test/simple \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make
+
