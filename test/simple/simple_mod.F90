@@ -3,6 +3,7 @@
 module simple_mod
 
   use ccpp_kinds,            only : kind_phys
+  use foobar,                only : foobar_t
 
   implicit none
   public
@@ -16,5 +17,7 @@ module simple_mod
   real(kind_phys) :: time_end
 
   integer         :: bar
+
+  type(foobar_t)  :: foobar
 
 end module simple_mod

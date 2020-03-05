@@ -14,7 +14,7 @@ SET(CCPP_FRAMEWORK ${CCPP_ROOT}/scripts)
 
 SET(HOST "simple")
 ADD_EXECUTABLE(${HOST} simple_host.F90)
-TARGET_SOURCES(${HOST} PUBLIC simple_scheme.F90 simple_mod.F90)
+TARGET_SOURCES(${HOST} PUBLIC foobar.F90 simple_scheme.F90 simple_mod.F90)
 
 if (${CMAKE_Fortran_COMPILER_ID} MATCHES "GNU")
   ADD_COMPILE_OPTIONS(-fcheck=all)
@@ -43,8 +43,8 @@ endif (${CMAKE_Fortran_COMPILER_ID} MATCHES "GNU")
 
 LIST(APPEND CMAKE_MODULE_PATH ${CCPP_FRAMEWORK}/cmake)
 
-SET(SCHEME_METADATA simple_scheme.meta)
-SET(HOST_METADATA simple_host.meta,simple_mod.meta)
+SET(SCHEME_METADATA foobar.meta,simple_scheme.meta)
+SET(HOST_METADATA foobar.meta,simple_host.meta,simple_mod.meta)
 SET(SUITE_XML simple_suite.xml)
 
 # Run ccpp_capgen

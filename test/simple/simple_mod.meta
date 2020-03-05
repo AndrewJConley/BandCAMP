@@ -14,6 +14,11 @@
   units = count
   dimensions = ()
   type = integer
+[foobar]
+  standard_name = foobar
+  long_name = fooooooobaaaaaar
+  dimensions = ()
+  ddt_type = foobar_t
 [dt]
   standard_name = time_step_for_physics
   long_name = time_step_for_physics
