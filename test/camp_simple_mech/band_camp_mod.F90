@@ -3,6 +3,7 @@
 module band_camp_mod
 
   use ccpp_kinds,            only : kind_phys
+  use pmc_util,              only : to_string
 
   implicit none
   public
@@ -36,14 +37,14 @@ contains
   subroutine initialize_data( )
 
     number_of_threads = 1
-    i_thread          = 1
+    thread_index      = 1
 
     path_to_camp_config_file = "../config.json"
 
     chemical_species_names = (/"species A","species B","species C"/)
     chemical_species_concentrations = (/12.0, 30.1, 50.0/)
 
-  end subroutine intiialize_data
+  end subroutine initialize_data
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -52,10 +53,10 @@ contains
 
     integer :: i_species
 
-    write(6,*) "Temperature",trim(to_string(temperature),"K"
-    write(6,*) "Pressure   ",trim(to_string(pressure   ),"Pa"
-    do i_species = 1, number_of_species
-      write(6.*) trim( chemical_species_names( i_species ) ),":",            &
+    write(6,*) "Temperature",trim( to_string(temperature) ),"K"
+    write(6,*) "Pressure   ",trim( to_string(pressure   ) ),"Pa"
+    do i_species = 1, number_of_chemical_species
+      write(6,*) trim( chemical_species_names( i_species ) ),":",            &
                  chemical_species_concentrations( i_species ),"ppm"
     end do
 

@@ -3,7 +3,7 @@
 module band_camp_host_main
 
   use ccpp_kinds,            only : kind_phys
-  use mock_mod,              only : time_start__s => time_start,             &
+  use band_camp_mod,         only : time_start__s => time_start,             &
                                     time_end__s   => time_end,               &
                                     dt__s         => dt,                     &
                                     initialize_data, output_model_state
@@ -14,6 +14,7 @@ module band_camp_host_main
   use band_camp_ccpp_cap,    only : band_camp_ccpp_physics_finalize
   use band_camp_ccpp_cap,    only : ccpp_physics_suite_list
   use band_camp_ccpp_cap,    only : ccpp_physics_suite_part_list
+  use pmc_util,              only : to_string
 
   implicit none
 
@@ -38,7 +39,7 @@ contains
     dt__s         = 5.0
 
     ! Initialize the test-specific data
-    call intialize_data( )
+    call initialize_data( )
 
     ! Initialize the mock suite
     call band_camp_ccpp_physics_initialize("band_camp_suite",                &

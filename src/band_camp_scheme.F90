@@ -7,7 +7,8 @@ module band_camp_scheme
   use pmc_camp_state,        only : camp_state_t
   use pmc_constants,         only : dp, i_kind
   use pmc_solver_stats,      only : solver_stats_t
-  use pmc_util,              only : assert_msg, string_array_find
+  use pmc_util,              only : assert_msg, string_array_find, string_t, &
+                                    to_string
 
   implicit none
 
@@ -62,10 +63,6 @@ contains
     !> Error flag (0 for success)
     integer, intent(out)            :: error_flag
 
-    ! hope for the best
-    error_message = ''
-    error_flag    = 1
-
     ! species names for map building
     type(string_t), allocatable :: CAMP_species_names(:)
 
@@ -73,9 +70,15 @@ contains
     character, allocatable :: buffer(:)
     integer :: pack_size, pos
 
+    integer :: i_spec, i_thread
+
+    ! hope for the best
+    error_message = ''
+    error_flag    = 1
+
     ! load and process the CAMP input data
     camp_cores( 1 )%core => camp_core_t( path_to_camp_config_file )
-    call camp_core%initialize( )
+    call camp_cores( 1 )%core%initialize( )
 
     ! pack the core data and interface
     pack_size = camp_cores( 1 )%core%pack_size( )
@@ -103,7 +106,8 @@ contains
     do i_spec = 1, size( species_map )
       species_map%CAMP_idx = i_spec
       species_map%CPF_idx  = &
-        string_array_find( chem_species_names, CAMP_species_names( i_spec ) )
+        string_array_find( chem_species_names,                               &
+                           CAMP_species_names( i_spec )%string )
     end do
 
   end subroutine band_camp_scheme_init
@@ -113,20 +117,23 @@ contains
   !> \section arg_table_band_camp_scheme_run Argument Table
   !! \htmlinclude band_camp_scheme_run.html
   !!
-  subroutine band_camp_scheme_run( num_chem_species, chem_species_conc__ppm, &
-                                   temperature__K,  pressure__Pa, i_thread,  &
-                                   error_message, error_flag )
+  subroutine band_camp_scheme_run( dt__s, num_chem_species,                  &
+                                   chem_species_conc__ppm, temperature__K,   &
+                                   pressure__Pa, i_thread, error_message,    &
+                                   error_flag )
 
     use pmc_solver_stats
 
+    !> Time step for chemistry [s]
+    real(kind=kind_phys), intent(in) :: dt__s
     !> Number of chemical species
     integer, intent(in) :: num_chem_species
     !> Chemical species concentrations (ppm)
     real(kind=kind_phys), dimension(num_chem_species), intent(inout) ::      &
       chem_species_conc__ppm
-    !> Temperature (K)
+    !> Temperature [K]
     real(kind=kind_phys), intent(in) :: temperature__K
-    !> Pressure (Pa)
+    !> Pressure [Pa]
     real(kind=kind_phys), intent(in) :: pressure__Pa
     !> Index of the current thread
     integer, intent(in)              :: i_thread
@@ -139,6 +146,8 @@ contains
     type(camp_core_t), pointer  :: camp_core
     type(camp_state_t), pointer :: camp_state
 
+    integer :: i_spec
+
     ! hope for the best
     error_message = ''
     error_flag    = 1
@@ -148,16 +157,16 @@ contains
     camp_state => camp_states( i_thread )%state
 
     ! Set the environmental conditions and state
-    camp_state%env_states( 1 )%set_temperature_K( temperature__K )
-    camp_state%env_states( 1 )%set_pressure_Pa(     pressure__Pa )
+    call camp_state%env_states( 1 )%set_temperature_K( temperature__K )
+    call camp_state%env_states( 1 )%set_pressure_Pa(     pressure__Pa )
     do i_spec = 1, size( species_map )
       if( species_map( i_spec )%CPF_idx .eq. 0 ) cycle
       camp_state%state_var( species_map( i_spec )%CAMP_idx ) =               &
-        chem_species_concentration__ppm( species_map( i_spec )%CPF_idx )
+        chem_species_conc__ppm( species_map( i_spec )%CPF_idx )
     end do
 
     ! Solve the chemistry for this cell
-    call camp_core%solve( camp_state, solver_stats )
+    call camp_core%solve( camp_state, dt__s, solver_stats = solver_stats )
 
     ! Analyze the results
     if( solver_stats%status_code.ne.0 ) then
@@ -170,7 +179,7 @@ contains
     ! Update the host model state
     do i_spec = 1, size( species_map )
       if( species_map( i_spec )%CPF_idx .eq. 0 ) cycle
-      chem_species_concentration__ppm( species_map( i_spec )%CPF_idx ) =     &
+      chem_species_conc__ppm( species_map( i_spec )%CPF_idx ) =     &
         camp_state%state_var( species_map( i_spec )%CAMP_idx )
     end do
 
@@ -196,7 +205,7 @@ contains
 
     if( allocated( camp_cores ) ) then
       do i_elem = 1, size( camp_cores )
-        if( associated( camp_cores( i_elem )%core                            &
+        if( associated( camp_cores( i_elem )%core ) )                        &
           deallocate( camp_cores( i_elem )%core )
       end do
       deallocate( camp_cores )
@@ -204,7 +213,7 @@ contains
 
     if( allocated( camp_states ) ) then
       do i_elem = 1, size( camp_states )
-        if( associated( camp_states( i_elem )%state                          &
+        if( associated( camp_states( i_elem )%state ) )                      &
           deallocate( camp_states( i_elem )%state )
       end do
       deallocate( camp_states )

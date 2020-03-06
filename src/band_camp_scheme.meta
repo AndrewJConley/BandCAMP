@@ -52,6 +52,14 @@
 [ccpp-arg-table]
   name = band_camp_scheme_run
   type = scheme
+[dt__s]
+  standard_name = time_step_for_physics
+  long_name = time_step_for_physics
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+  intent = in
 [num_chem_species]
   standard_name = number_of_chemical_species
   long_name = Number of chemical species
