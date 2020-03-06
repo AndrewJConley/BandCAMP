@@ -1,0 +1,128 @@
+[ccpp-arg-table]
+  name = band_camp_scheme_init
+  type = scheme
+[num_chem_species]
+  standard_name = number_of_chemical_species
+  long_name = Number of chemical species
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[chem_species_names]
+  standard_name = chemical_species_names
+  long_name = Unique names for each chemical species
+  units = 1
+  dimensions = (number_of_chemical_species)
+  type = character
+  kind = len=50
+  intent = in
+[path_to_camp_config_file]
+  standard_name = path_to_camp_config_file
+  long_name = Path to the CAMP config json file
+  units = 1
+  dimensions = ()
+  type = character
+  kind = len=512
+  intent = in
+[num_threads]
+  standard_name = number_of_threads
+  long_name = Number of threads available during run call
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[error_message]
+  standard_name = ccpp_error_message
+  long_name = CCPP error message
+  units = 1
+  dimensions = ()
+  type = character
+  kind = len=512
+  intent = out
+[error_flag]
+  standard_name = ccpp_error_flag
+  long_name = CCPP error flag
+  units = flag
+  dimensions = ()
+  type = integer
+  intent = out
+
+########################################################################
+
+[ccpp-arg-table]
+  name = band_camp_scheme_run
+  type = scheme
+[num_chem_species]
+  standard_name = number_of_chemical_species
+  long_name = Number of chemical species
+  units = count
+  dimensions = ()
+  type = integer
+  intent = in
+[chem_species_conc__ppm]
+  standard_name = chemical_species_concentrations
+  long_name = Chemical species concentrations
+  units = ppm
+  dimensions = (number_of_chemical_species)
+  type = real
+  kind = kind_phys
+  intent = inout
+[temperature__K]
+  standard_name = temperature
+  long_name = Temperature
+  units = K
+  dimensions = ()
+  type = real
+  kind = kind_phys
+  intent = in
+[pressure__Pa]
+  standard_name = pressure
+  long_name = Pressure
+  units = Pa
+  dimensions = ()
+  type = real
+  kind = kind_phys
+  intent = in
+[i_thread]
+  standard_name = thread_index
+  long_name = Index of thread calling run subroutine
+  units = index
+  dimensions = ()
+  type = integer
+  intent = in
+[error_message]
+  standard_name = ccpp_error_message
+  long_name = CCPP error message
+  units = 1
+  dimensions = ()
+  type = character
+  kind = len=512
+  intent = out
+[error_flag]
+  standard_name = ccpp_error_flag
+  long_name = CCPP error flag
+  units = flag
+  dimensions = ()
+  type = integer
+  intent = out
+
+########################################################################
+
+[ccpp-arg-table]
+  name = band_camp_scheme_finalize
+  type = scheme
+[error_message]
+  standard_name = ccpp_error_message
+  long_name = CCPP error message
+  units = 1
+  dimensions = ()
+  type = character
+  kind = len=512
+  intent = out
+[error_flag]
+  standard_name = ccpp_error_flag
+  long_name = CCPP error flag
+  units = flag
+  dimensions = ()
+  type = integer
+  intent = out

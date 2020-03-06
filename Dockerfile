@@ -40,3 +40,10 @@ RUN cd BandCAMP/test/simple \
     && cmake .. \
     && make
 
+# Build the BandCAMP simple mechanism test
+RUN cd BandCAMP/test/camp_simple_mech \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make
+

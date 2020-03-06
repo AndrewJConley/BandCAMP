@@ -12,7 +12,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> \section arg_table_simple_scheme_init Argument Table
-  !! \htmlinclude chemistry_driver_init.html
+  !! \htmlinclude simple_scheme_init.html
   !!
   subroutine simple_scheme_init(foo, bar, foobar, errmsg, errflg)
 
@@ -32,7 +32,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> \section arg_table_simple_scheme_run Argument Table
-  !! \htmlinclude chemistry_driver_run.html
+  !! \htmlinclude simple_scheme_run.html
   !!
   subroutine simple_scheme_run(foo, bar, foobar, errmsg, errflg)
 
@@ -54,7 +54,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> \section arg_table_simple_scheme_finalize Argument Table
-  !! \htmlinclude chemistry_driver_finalize.html
+  !! \htmlinclude simple_scheme_finalize.html
   !!
   subroutine simple_scheme_finalize(errmsg, errflg)
 

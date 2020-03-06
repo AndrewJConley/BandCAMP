@@ -1,0 +1,78 @@
+[ccpp-arg-table]
+  name = band_camp_mod
+  type = module
+[dt]
+  standard_name = time_step_for_physics
+  long_name = time_step_for_physics
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[time_start]
+  standard_name = chem_step_start_time
+  long_name = Chemistry step start time
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[time_end]
+  standard_name = chem_step_end_time
+  long_name = Chemistry step end time
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[temperature]
+  standard_name = temperature
+  long_name = Temperature
+  units = K
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[pressure]
+  standard_name = pressure
+  long_name = Pressure
+  units = Pa
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[number_of_chemical_species]
+  standard_name = number_of_chemical_species
+  long_name = Number of chemical species
+  units = count
+  dimensions = ()
+  type = integer
+[number_of_threads]
+  standard_name = number_of_threads
+  long_name = Number of threads to use during run calls
+  units = count
+  dimensions = ()
+  type = integer
+[thread_index]
+  standard_name = thread_index
+  long_name = Index of the thread calling the run subroutine
+  units = index
+  dimensions = ()
+  type = integer
+[path_to_camp_config_file]
+  standard_name = path_to_camp_config_file
+  long_name = Path the the CAMP config json file
+  units = 1
+  dimensions = ()
+  type = character
+  kind = len=512
+[chemical_species_concentrations]
+  standard_name = chemical_species_concentrations
+  long_name = Chemical species concentrations
+  units = ppm
+  dimensions = (number_of_chemical_species)
+  type = real
+  kind = kind_phys
+[chemical_species_names]
+  standard_name = chemical_species_names
+  long_name = Chemical species names
+  units = 1
+  dimensions = (number_of_chemical_species)
+  type = character
+  kind = len=50
+
