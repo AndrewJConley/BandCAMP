@@ -1,0 +1,42 @@
+[ccpp-arg-table]
+  name = simple_mod
+  type = module
+[foo]
+  standard_name = foo
+  long_name = foo
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[bar]
+  standard_name = bar
+  long_name = bar
+  units = count
+  dimensions = ()
+  type = integer
+[foobar]
+  standard_name = foobar
+  long_name = fooooooobaaaaaar
+  dimensions = ()
+  ddt_type = foobar_t
+[dt]
+  standard_name = time_step_for_physics
+  long_name = time_step_for_physics
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[time_start]
+  standard_name = chem_step_start_time
+  long_name = Chem step start time
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys
+[time_end]
+  standard_name = chem_step_end_time
+  long_name = Chem step end time
+  units = s
+  dimensions = ()
+  type = real
+  kind = kind_phys

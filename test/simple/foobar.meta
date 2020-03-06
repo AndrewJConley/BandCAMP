@@ -1,0 +1,14 @@
+[ccpp-arg-table]
+  name = foobar_t
+  type = ddt
+[foo]
+  standard_name = foo
+  dimensions = ()
+  units = s
+  type = real
+  kind = kind_phys
+[bar]
+  standard_name = bar
+  dimensions = ()
+  units = count
+  type = integer
