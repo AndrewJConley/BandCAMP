@@ -70,11 +70,15 @@ contains
     character, allocatable :: buffer(:)
     integer :: pack_size, pos
 
-    integer :: i_spec, i_thread
+    integer :: i_spec, i_thread, map_size, i_map, i_CPF_species
 
     ! hope for the best
     error_message = ''
-    error_flag    = 1
+    error_flag    = 0
+
+    ! Allocate the arrays of pointers for each thread
+    allocate( camp_cores(  num_threads ) )
+    allocate( camp_states( num_threads ) )
 
     ! load and process the CAMP input data
     camp_cores( 1 )%core => camp_core_t( path_to_camp_config_file )
@@ -102,13 +106,34 @@ contains
 
     ! Build the species map
     CAMP_species_names = camp_cores( 1 )%core%unique_names( )
-    allocate( species_map( size( CAMP_species_names ) ) )
-    do i_spec = 1, size( species_map )
-      species_map%CAMP_idx = i_spec
-      species_map%CPF_idx  = &
-        string_array_find( chem_species_names,                               &
-                           CAMP_species_names( i_spec )%string )
+
+    ! Count the number of matching species
+    map_size = 0
+    do i_spec = 1, size( CAMP_species_names )
+      if( string_array_find( chem_species_names,                             &
+                             CAMP_species_names( i_spec )%string ) .eq. 0 )  &
+        cycle
+      map_size = map_size + 1
     end do
+
+    allocate( species_map( map_size ) )
+
+    ! Fill in the map indices
+    i_map = 0
+    do i_spec = 1, size( species_map )
+      i_CPF_species = string_array_find( chem_species_names,                 &
+                                         CAMP_species_names( i_spec )%string )
+      if( i_CPF_species .eq. 0 ) cycle
+      i_map = i_map + 1
+      species_map( i_map )%CAMP_idx = i_spec
+      species_map( i_map )%CPF_idx  = i_CPF_species
+    end do
+
+    if( i_map .ne. map_size ) then
+      error_flag = 1
+      error_message = "Internal error building CAMP<->CPF species map"
+      return
+    end if
 
   end subroutine band_camp_scheme_init
 
@@ -150,7 +175,7 @@ contains
 
     ! hope for the best
     error_message = ''
-    error_flag    = 1
+    error_flag    = 0
 
     ! attach to the core and state for this thread
     camp_core  => camp_cores(  i_thread )%core
@@ -201,7 +226,7 @@ contains
 
     ! hope for the best
     error_message = ''
-    error_flag    = 1
+    error_flag    = 0
 
     if( allocated( camp_cores ) ) then
       do i_elem = 1, size( camp_cores )

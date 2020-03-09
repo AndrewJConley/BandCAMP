@@ -99,5 +99,6 @@ RUN cd BandCAMP/test/simple \
 RUN cd BandCAMP/test/camp_simple_mech \
     && mkdir build \
     && cd build \
-    && cmake ..
+    && cmake .. \
+    && make
 

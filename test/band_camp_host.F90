@@ -47,8 +47,14 @@ contains
                                            error_flag )
     call check_error_flag( error_flag, error_message )
 
-    ! Run the model
+    ! Set the simulation time
     simulation_time__s = time_start__s
+
+    ! Output the initial conditions
+    write(6,*) "Model state at ", simulation_time__s, " s"
+    call output_model_state( )
+
+    ! Run the model
     time_loop : do while( simulation_time__s .lt. time_end__s )
 
       ! Announce a new time step
@@ -73,6 +79,7 @@ contains
       ! Advance the simulation time
       simulation_time__s = simulation_time__s + dt__s
 
+      ! Output current model state
       write(6,*) "Model state at ", trim( to_string( simulation_time__s ) ), &
                  " s"
       call output_model_state( )

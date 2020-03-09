@@ -41,7 +41,10 @@ contains
 
     path_to_camp_config_file = "../config.json"
 
-    chemical_species_names = (/"species A","species B","species C"/)
+    temperature = 298.0
+    pressure    = 101325.0
+
+    chemical_species_names = (/"Species A","Species B","Species C"/)
     chemical_species_concentrations = (/12.0, 30.1, 50.0/)
 
   end subroutine initialize_data
@@ -53,11 +56,11 @@ contains
 
     integer :: i_species
 
-    write(6,*) "Temperature",trim( to_string(temperature) ),"K"
-    write(6,*) "Pressure   ",trim( to_string(pressure   ) ),"Pa"
+    write(6,*) "Temperature ",trim( to_string(temperature) )," K"
+    write(6,*) "Pressure    ",trim( to_string(pressure   ) )," Pa"
     do i_species = 1, number_of_chemical_species
-      write(6,*) trim( chemical_species_names( i_species ) ),":",            &
-                 chemical_species_concentrations( i_species ),"ppm"
+      write(6,*) trim( chemical_species_names( i_species ) ),": ",           &
+                 chemical_species_concentrations( i_species )," ppm"
     end do
 
   end subroutine output_model_state

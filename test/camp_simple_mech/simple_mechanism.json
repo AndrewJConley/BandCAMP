@@ -1,0 +1,50 @@
+{
+  "pmc-data" : [
+    {
+      "type" : "RELATIVE_TOLERANCE",
+      "value" : 1.0e-8
+    },
+    {
+      "name" : "Species A",
+      "type" : "CHEM_SPEC",
+      "absolute integration tolerance" : 1.0e-10
+    },
+    {
+      "name" : "Species B",
+      "type" : "CHEM_SPEC",
+      "absolute integration tolerance" : 1.0e-10
+    },
+    {
+      "name" : "Species C",
+      "type" : "CHEM_SPEC",
+      "absolute integration tolerance" : 1.0e-10
+    },
+    {
+      "name" : "simple mechanism",
+      "type" : "MECHANISM",
+      "reactions" : [
+        {
+          "type" : "ARRHENIUS",
+          "reactants" : { "Species A" : {} },
+          "products" : { "Species B" : {} },
+          "A" : 21.0,
+          "C" : -4000.0
+        },
+        {
+          "type" : "ARRHENIUS",
+          "reactants" : { "Species A" : {} },
+          "products" : { "Species C" : {} },
+          "A" : 3.0,
+          "C" : -3200.0
+        },
+        {
+          "type" : "ARRHENIUS",
+          "reactants" : { "Species B" : {} },
+          "products" : { "Species C" : {} },
+          "A" : 13.0,
+          "C" : -3600.0
+        }
+      ]
+    }
+  ]
+}
